@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Application
 {
-    class ConsoleViewUI : IViewUI
+    class ConsoleViewUI : IUi
     {
-        private BattleField firstField;
-        private BattleField secondField;
+        private Field firstField;
+        private Field secondField;
 
-        public ConsoleViewUI(BattleField firstField, BattleField secondField)
+        public ConsoleViewUI(Field firstField, Field secondField)
         {
             this.firstField = firstField;
             this.firstField.ShowShips();
@@ -19,14 +19,14 @@ namespace Application
             this.ShowField(secondField);
         }
         
-        void ShowField(BattleField field)
+        void ShowField(Field field)
         {
             Console.WriteLine("");
-            for (int x = 0; x < field.Width; x++)
+            for (int x = 0; x < field.getWidth(); x++)
             {
-                for (int y = 0; y < field.Height; y++)
+                for (int y = 0; y < field.getHeight(); y++)
                 {
-                    Console.Write((int)field.GetCellState(x, y));
+                    Console.Write((int)field.GetCellType(x, y));
                 }
                 Console.WriteLine();
             }
@@ -34,6 +34,11 @@ namespace Application
 
         public void UpdateFields()
         {
+        }
+
+        void IUi.Update()
+        {
+            throw new NotImplementedException();
         }
     }
 }

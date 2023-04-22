@@ -1,119 +1,177 @@
 using System;
 using System.Collections.Generic;
 
-public class Ship
+namespace BattleShip
 {
-    private int startX;
-    private int startY;
-    private Cell[] borders;
-    private Cell[] decks;
-    private int size;
-    private bool isDead;
-    private bool direction;
-    private int widthBorder;
-    private int heightBorder;
-
-    private bool GetRandomDirection()
+    public class Ship
     {
-        Random rand = new Random();
-        int randValue = rand.Next(0, 2);
-        return randValue == 1;
-        /*return DateTime.Now.Ticks%2 == 1;*/
-    }
-
-    private void GetRandomPlacement()
-    {
-        Random rand = new Random();
-        this.startX = this.direction ? rand.Next(0, this.widthBorder - this.size) : rand.Next(0, this.widthBorder);
-        this.startY = this.direction ? rand.Next(0, this.heightBorder) : rand.Next(0, this.heightBorder - this.size);
-    }
-
-    private void Initialization()
-    {
-        this.isDead = false;
-        this.Regeneration();
-    }
-
-    public bool IsDead
-    {
-        get
+        private void Initialization()
         {
-            return isDead;
+            this.isDead = false;
+            //this.x = rand() % (this.field.getWidth() - this.size);
+            //this.y = rand() % (this.field.getHeight() - this.size);
+            //this.direction = (rand() % 2) == 1;
         }
-    }
 
-    public Cell[] Border
-    {
-        get
+        private void MakeBorder()
         {
-            return borders;
-        }
-    }
+            int borderWidth = direction ? (this.x == 0 || this.x >= this.field.getWidth() - this.size ? this.size + 1 : this.size + 2)
+                                        : (this.x == 0 || this.x == this.field.getWidth() - 1 ? 2 : 3);
 
-    public Cell[] Decks
-    {
-        get
+            int borderHeight = !direction ? (this.y == 0 || this.y >= this.field.getHeight() - this.size ? this.size + 1 : this.size + 2)
+                                         : (this.y == 0 || this.y == this.field.getHeight() - 1 ? 2 : 3);
+
+            this.borderSize = borderWidth * borderHeight;
+            this.border = new Cell[this.borderSize];
+
+            int tempX = this.x - 1 < 0 ? this.x : this.x - 1;
+            int tempY = this.y - 1 < 0 ? this.y : this.y - 1;
+
+            for (int borderY = 0; borderY < borderHeight; borderY++)
+                for (int borderX = 0; borderX < borderWidth; borderX++)
+                    this.border[borderY * borderWidth + borderX] = new Cell(tempX + borderX, tempY + borderY, ECellType.miss);
+        }
+
+        private void MakeDecks()
         {
-            return decks;
-        }
-    }
+            this.decks = new Cell[this.size];
 
-    public int Size
-    {
-        get
+            for (int deckCount = 0; deckCount < this.size; deckCount++)
+                this.decks[deckCount] = new Cell(
+                        this.direction ? this.x + deckCount : this.x,
+                        this.direction ? this.y : deckCount + this.y,
+                        ECellType.alive);
+        }
+
+        private void Strike(int deckCount)
         {
-            return this.size;
+            this.decks[deckCount].setECellType(ECellType.wound);
+
+            int woundCount = 0;
+
+            for (int decksCount = 0; decksCount < this.size; decksCount++)
+                if (this.decks[decksCount].getECellType() == ECellType.wound)
+                    woundCount++;
+
+            this.isDead = woundCount == this.size;
+
+            if (this.isDead)
+            {
+                for (int decksCount = 0; decksCount < this.size; decksCount++)
+                    this.decks[decksCount].setECellType(ECellType.dead);
+                this.ShowMe();
+            }
         }
+
+        private int x;
+        private int y;
+        private bool direction;
+        private bool isDead;
+        private int size;
+        private int borderSize;
+
+        private Field field;
+        private Cell[] decks;
+
+        public Cell[] Decks
+        {
+            get
+            {
+                return this.decks;
+            }
+        }
+
+        private Cell[] border;
+
+        public Cell[] Border
+        {
+            get
+            {
+                return this.border;
+            }
+        }
+
+        public ECellType Attack(int x, int y)
+        {
+            for (int deckCount = 0; deckCount < this.size; deckCount++)
+                if (this.decks[deckCount].getX() == x && this.decks[deckCount].getY() == y)
+                {
+                    switch (this.decks[deckCount].getECellType())
+                    {
+                        case ECellType.alive:
+                            this.Strike(deckCount);
+                            return ECellType.alive;
+                    }
+                }
+
+            return ECellType.free;
+        }
+
+        public bool CanUseCell(int x, int y)
+        {
+            for (int borderCellCount = 0; borderCellCount < this.borderSize; borderCellCount++)
+                if (this.border[borderCellCount].getX() == x && this.border[borderCellCount].getY() == y)
+                    return false;
+            return true;
+        }
+
+        public bool Check(Ship ship)
+        {
+            for (int decksCellCount = 0; decksCellCount < this.size; decksCellCount++)
+                if (!ship.CanUseCell(this.decks[decksCellCount].getX(), this.decks[decksCellCount].getY()))
+                    return false;
+            return true;
+        }
+
+        public void Regeneration()
+        {
+            /*this.x = rand() % (this.field.getWidth() - this.size);
+            this.y = rand() % (this.field.getHeight() - this.size);*/
+
+            this.MakeDecks();
+            this.MakeBorder();
+        }
+
+        public void ShowMe()
+        {
+            for (int borderCount = 0; borderCount < this.borderSize; borderCount++)
+                this.field.SetCellType(this.border[borderCount].getX(), this.border[borderCount].getY(), this.border[borderCount].getECellType());
+
+            for (int deckCount = 0; deckCount < this.size; deckCount++)
+                this.field.SetCellType(this.decks[deckCount].getX(), this.decks[deckCount].getY(), this.decks[deckCount].getECellType());
+        }
+
+        public void KillSelf()
+        {
+            for (int deckCount = 0; deckCount < this.size; deckCount++)
+                this.decks[deckCount].setECellType(ECellType.dead);
+
+            this.isDead = true;
+        }
+
+        public Ship(Field field, int size)
+        {
+            this.field = field;
+            this.size = size;
+            this.Initialization();
+            this.Regeneration();
+        }
+
+        public bool getIsDead()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Ship(Cell firstCell, bool direction, int size, Field field)
+        {
+            this.x = firstCell.getX();
+            this.y = firstCell.getY();
+            this.direction = direction;
+            this.size = size;
+            this.field = field;
+            this.MakeDecks();
+            this.MakeBorder();
+        }
+
     }
-
-    public void Regeneration()
-    {
-        this.direction = this.GetRandomDirection();
-        this.GetRandomPlacement();
-        this.MakeDecks();
-        this.MakeBorder();
-    }
-
-    private void MakeBorder()
-    {
-        List<Cell> cells = new List<Cell>();
-
-        if (this.direction)
-            for (int borderHeight = -1; borderHeight < 2; borderHeight++)
-                for (int decksCount = -1; decksCount < this.size + 1; decksCount++)
-                    cells.Add(new Cell(this.startX + decksCount, this.startY + borderHeight, ECellState.alive));
-        else
-            for (int borderWidht = -1; borderWidht < 2; borderWidht++)
-                for (int decksCount = -1; decksCount < this.size + 1; decksCount++)
-                    cells.Add(new Cell(this.startX + borderWidht, this.startY + decksCount, ECellState.alive));
-
-        cells.RemoveAll(cell => Array.Exists(this.decks, deck => deck.X == cell.X && deck.Y == cell.Y));
-        cells.RemoveAll(cell => cell.X < 0 || cell.X > this.widthBorder || cell.Y < 0 || cell.Y > this.heightBorder);
-
-        this.borders = cells.ToArray();
-    }
-
-    private void MakeDecks()
-    {
-        this.decks = new Cell[size];
-        for (int cellCount = 0; cellCount < this.size; cellCount++)
-            this.decks[cellCount] = new Cell(this.direction ? this.startX + cellCount : this.startX, this.direction ? this.startY : this.startY + cellCount, ECellState.alive);
-    }
-
-    public bool CanUseCell(int x, int y)
-    {
-        bool isDeck = Array.Exists(this.decks, deck => deck.X == x && deck.Y == y);
-        bool isBorder = Array.Exists(this.borders, border => border.X == x && border.Y == y);
-        return !(isDeck || isBorder);
-    }
-
-    public Ship(int widthBorder, int heightBorder, int size)
-    {
-        this.widthBorder = widthBorder;
-        this.heightBorder = heightBorder;
-        this.size = size;
-        this.Initialization();
-        this.Regeneration();
-    }
-
 }

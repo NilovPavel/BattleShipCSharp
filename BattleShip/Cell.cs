@@ -1,52 +1,54 @@
+// File:    Cell.cs
+// Author:  nilov_pg
+// Created: 16 июля 2020 г. 9:51:06
+// Purpose: Definition of Class Cell
+
 using System;
 
-public class Cell
+namespace BattleShip
 {
-    private int x;
-    private int y;
-    private ECellState eCellStatus;
-
-    public int X
+    public class Cell
     {
-        get
-        {
-            return x;
-        }
-        set
-        {
-            this.x = value;
-        }
-    }
+        private int x;
+        private int y;
+        private ECellType eCellType;
 
-    public int Y
-    {
-        get
+        public int getX()
         {
-            return y;
+            throw new NotImplementedException();
         }
-        set
-        {
-            this.y = value;
-        }
-    }
 
-    public ECellState ECellStatus
-    {
-        get
+        public void setX(int newX)
         {
-            return eCellStatus;
+            throw new NotImplementedException();
         }
-        set
+
+        public int getY()
         {
-            this.eCellStatus = value;
+            throw new NotImplementedException();
         }
-    }
 
-    public Cell(int x, int y, ECellState eCellStatus)
-    {
-        this.x = x;
-        this.y = y;
-        this.eCellStatus = eCellStatus;
-    }
+        public void setY(int newY)
+        {
+            throw new NotImplementedException();
+        }
 
+        public ECellType getECellType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void setECellType(ECellType newECellType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Cell(int x, int y, ECellType eCellType)
+        {
+            this.x = x;
+            this.y = y;
+            this.eCellType = eCellType;
+        }
+
+    }
 }
