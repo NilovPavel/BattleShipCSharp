@@ -9,48 +9,137 @@ namespace BattleShip
 {
     public class MachinePlayer : IPlayer
     {
-        private int v1;
-        private int v2;
+        private Field enemyField;
+        private Ship[] enemyShips;
+        private int[] shipSizes;
+        private int width;
+        private int height;
 
-        public MachinePlayer(int v1, int v2)
+        public MachinePlayer(int[] shipSizes, int width, int height)
         {
-            this.v1 = v1;
-            this.v2 = v2;
+            this.shipSizes = shipSizes;
+            this.width = width;
+            this.height = height;
+            this.Initialization();
         }
 
-        public void CanTakeCell(int x, int y)
+        private void Initialization()
         {
-            throw new NotImplementedException();
+            this.enemyField = new Field(this.height, this.width);
+            this.enemyShips = new Ship[this.shipSizes.Length];
         }
 
-        public void CalcNextCoordinats(int x, int y)
+        public bool CanTakeCell(int x, int y)
         {
-            throw new NotImplementedException();
+            if (x > this.enemyField.getWidth() || x < 0 || y > this.enemyField.getHeight() || y < 0)
+                return false;
+
+            return this.enemyField.GetCellType(x, y) == ECellType.empty;
+        }
+
+        public void CalcNextCoordinats(out int x, out int y)
+        {
+            Cell firstWoundCell = new Cell(0, 0, ECellType.wound);
+            Cell lastWoundCell = new Cell(0, 0, ECellType.wound);
+
+            int woundCellCount = this.GetWoundCells(firstWoundCell, lastWoundCell);
+
+            int cellIndex = 0;
+            switch (woundCellCount)
+            {
+                case 0:
+                    cellIndex = this.GetCellIndexZeroWound();
+                    break;
+                case 1:
+                    cellIndex = this.GetCellIndexOneWound(firstWoundCell);
+                    break;
+                default:
+                    cellIndex = this.GetCellIndexMultyplyWound(firstWoundCell, lastWoundCell);
+                    break;
+            }
+
+            x = cellIndex % this.enemyField.getWidth();
+            y = cellIndex / this.enemyField.getWidth();
         }
 
         public int GetWoundCells(Cell firstWoundCell, Cell lastWoundCell)
         {
-            throw new NotImplementedException();
+            int woundCellCount = 0;
+
+            for (int cellCountY = 0; cellCountY < this.enemyField.getHeight(); cellCountY++)
+                for (int cellCountX = 0; cellCountX < this.enemyField.getWidth(); cellCountX++)
+                    if (this.enemyField.GetCellType(cellCountX, cellCountY) == ECellType.wound)
+                    {
+                        Cell currentCell = new Cell(cellCountX, cellCountY, ECellType.wound);
+                        if (woundCellCount == 0)
+                            firstWoundCell = currentCell;
+                        lastWoundCell = new Cell(cellCountX, cellCountY, ECellType.wound);
+                        woundCellCount++;
+                    }
+            return woundCellCount;
         }
 
         public int GetCellIndexZeroWound()
         {
-            throw new NotImplementedException();
+            int x = 0;
+            int y = 0;
+            do
+            {
+                int z = new Random().Next(0, this.enemyField.getWidth() * this.enemyField.getHeight());
+                x = z / this.enemyField.getWidth();
+                y = z % this.enemyField.getWidth();
+            }
+            while (!this.CanTakeCell(x, y));
+            return y * this.enemyField.getWidth() + x;
         }
 
         public int GetCellIndexOneWound(Cell firstWoundCell)
         {
-            throw new NotImplementedException();
+            int x = firstWoundCell.getX() - 1;
+            int y = firstWoundCell.getY();
+
+            if (this.CanTakeCell(x, y))
+                return y * this.enemyField.getWidth() + x;
+
+            x = firstWoundCell.getX() + 1;
+            y = firstWoundCell.getY();
+
+            if (this.CanTakeCell(x, y))
+                return y * this.enemyField.getWidth() + x;
+
+            x = firstWoundCell.getX();
+            y = firstWoundCell.getY() - 1;
+
+            if (this.CanTakeCell(x, y))
+                return y * this.enemyField.getWidth() + x;
+
+            x = firstWoundCell.getX();
+            y = firstWoundCell.getY() + 1;
+
+            if (this.CanTakeCell(x, y))
+                return y * this.enemyField.getWidth() + x;
+
+            return y * this.enemyField.getWidth() + x;
         }
 
         public int GetCellIndexMultyplyWound(Cell firstWoundCell, Cell lastWoundCell)
         {
-            throw new NotImplementedException();
+            bool direction = lastWoundCell.getY() - firstWoundCell.getY() == 0;
+            int x = direction ? firstWoundCell.getX() - 1 : firstWoundCell.getX();
+            int y = direction ? firstWoundCell.getY() : firstWoundCell.getY() - 1;
+
+            if (this.CanTakeCell(x, y))
+                return y * this.enemyField.getWidth() + x;
+
+            x = direction ? lastWoundCell.getX() + 1 : lastWoundCell.getX();
+            y = direction ? lastWoundCell.getY() : lastWoundCell.getY() + 1;
+
+            return y * this.enemyField.getWidth() + x;
         }
 
         public void MakeShot(out int x, out int y)
         {
-            throw new NotImplementedException();
+            this.CalcNextCoordinats(out x, out y);
         }
     }
 }

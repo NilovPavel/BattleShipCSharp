@@ -42,6 +42,8 @@ namespace BattleShip
 
         public void SetCellType(int x, int y, ECellType eCellType)
         {
+            if (y * this.width + x >= 100) 
+                return;
             this.cells[y * this.width + x].setECellType(eCellType);
         }
 

@@ -8,9 +8,12 @@ namespace BattleShip
         private void Initialization()
         {
             this.isDead = false;
-            this.x = new Random().Next(0, this.field.getWidth() - this.size);
-            this.y = new Random().Next(0, this.field.getHeight() - this.size);
-            this.direction = new Random().Next(0, 2) == 1;
+
+            int z = new Random().Next(0, this.field.getWidth() * this.field.getHeight());
+            this.x = z / this.field.getWidth();
+            this.y = z % this.field.getWidth();
+
+            this.direction = new Random().Next(0, 2) == 0;
         }
 
         private void MakeBorder()
@@ -125,8 +128,9 @@ namespace BattleShip
 
         public void Regeneration()
         {
-            this.x = new Random().Next(0, this.field.getWidth());
-            this.y = new Random().Next(0, this.field.getHeight());
+            int z = new Random().Next(0, this.field.getWidth() * this.field.getHeight());
+            this.x = z / this.field.getWidth();
+            this.y = z % this.field.getWidth();
 
             this.MakeDecks();
             this.MakeBorder();

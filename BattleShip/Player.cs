@@ -29,8 +29,8 @@ namespace BattleShip
         private IPlayer iPlayer;
         private Field field;
         private Ship[] ships;
-        private IPlayer firstPlayer;
-        private Field firstPlayerField;
+        /*private IPlayer firstPlayer;
+        private Field firstPlayerField;*/
         private int[] shipSizes;
 
         public Ship[] Ships

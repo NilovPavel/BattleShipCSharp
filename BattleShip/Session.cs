@@ -29,8 +29,8 @@ namespace BattleShip
             this.firstPlayerField = new Field(10, 10);
             this.secondPlayerField = new Field(10, 10);
 
-            this.firstPlayer = new MachinePlayer(secondPlayerField.getHeight(), secondPlayerField.getWidth());
-            this.secondPlayer = new MachinePlayer(firstPlayerField.getHeight(), firstPlayerField.getWidth());
+            this.firstPlayer = new MachinePlayer(this.shipSizes, this.secondPlayerField.getHeight(), secondPlayerField.getWidth());
+            this.secondPlayer = new MachinePlayer(this.shipSizes, this.firstPlayerField.getHeight(), firstPlayerField.getWidth());
         }
 
         public void SetGUI(Ui userInterFace)
@@ -44,6 +44,10 @@ namespace BattleShip
         {
             Player currentAttacker = new Player(this.firstPlayer, this.firstPlayerField, this.shipSizes);
             Player currentSacrifice = new Player(this.secondPlayer, this.secondPlayerField, this.shipSizes);
+
+            currentAttacker.ShowSelf();
+            currentSacrifice.ShowSelf();
+
             Player temp = default(Player);
 
             while (!currentAttacker.IsDead() && !currentSacrifice.IsDead())
