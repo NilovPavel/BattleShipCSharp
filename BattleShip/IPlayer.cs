@@ -9,7 +9,6 @@ namespace BattleShip
 {
     public interface IPlayer
     {
-        void MakeShot(int x, int y);
-
+        void MakeShot(out int x, out int y);
     }
 }

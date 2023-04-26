@@ -8,9 +8,9 @@ namespace BattleShip
         private void Initialization()
         {
             this.isDead = false;
-            //this.x = rand() % (this.field.getWidth() - this.size);
-            //this.y = rand() % (this.field.getHeight() - this.size);
-            //this.direction = (rand() % 2) == 1;
+            this.x = new Random().Next(0, this.field.getWidth() - this.size);
+            this.y = new Random().Next(0, this.field.getHeight() - this.size);
+            this.direction = new Random().Next(0, 2) == 1;
         }
 
         private void MakeBorder()
@@ -104,7 +104,7 @@ namespace BattleShip
                     }
                 }
 
-            return ECellType.free;
+            return ECellType.empty;
         }
 
         public bool CanUseCell(int x, int y)
@@ -125,8 +125,8 @@ namespace BattleShip
 
         public void Regeneration()
         {
-            /*this.x = rand() % (this.field.getWidth() - this.size);
-            this.y = rand() % (this.field.getHeight() - this.size);*/
+            this.x = new Random().Next(0, this.field.getWidth());
+            this.y = new Random().Next(0, this.field.getHeight());
 
             this.MakeDecks();
             this.MakeBorder();
@@ -159,7 +159,7 @@ namespace BattleShip
 
         public bool getIsDead()
         {
-            throw new NotImplementedException();
+            return this.isDead;
         }
 
         public Ship(Cell firstCell, bool direction, int size, Field field)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleShip;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ namespace Application
     {
         static void Main(string[] args)
         {
-            /*Field firstField = new BattleField(10, 10);
-            BattleField secondField = new BattleField(10, 10);
-
-            IViewUI viewUI = new ConsoleViewUI(firstField, secondField);
-            Player player = new Player(new Human());
-            viewUI.UpdateFields();*/
+            Session session = new Session();
+            /*IPlayer *firstIPlayer = new HumanPlayer(*(new UserConsole()));
+            session->SetFirstIPlayer(*firstIPlayer);*/
+            Ui userInterFace = new ConsoleViewUI();
+            session.SetGUI(userInterFace);
+            session.RunGame();
 
         }
     }

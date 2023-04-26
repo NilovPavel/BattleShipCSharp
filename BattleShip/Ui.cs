@@ -7,8 +7,18 @@ using System;
 
 namespace BattleShip
 {
-    public interface IUi
+    abstract public class Ui
     {
-        void Update();
+        protected Field firstField;
+        protected Field secondField;
+        abstract public void Update();
+        public void SetFirstField(Field firstPlayerField)
+        {
+            this.firstField = firstPlayerField;
+        }
+        public void SetSecondField(Field secondPlayerField)
+        {
+            this.secondField = secondPlayerField;
+        }
     }
 }

@@ -1,24 +1,13 @@
-﻿using System;
+﻿using BattleShip;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Application
 {
-    class ConsoleViewUI : IUi
+    class ConsoleViewUI : Ui
     {
-        private Field firstField;
-        private Field secondField;
-
-        public ConsoleViewUI(Field firstField, Field secondField)
-        {
-            this.firstField = firstField;
-            this.firstField.ShowShips();
-            this.secondField = secondField;
-            this.ShowField(firstField);
-            this.ShowField(secondField);
-        }
-        
         void ShowField(Field field)
         {
             Console.WriteLine("");
@@ -32,13 +21,11 @@ namespace Application
             }
         }
 
-        public void UpdateFields()
+        public override void Update()
         {
-        }
-
-        void IUi.Update()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine("NEXT STEP");
+            this.ShowField(this.firstField);
+            this.ShowField(this.secondField);
         }
     }
 }

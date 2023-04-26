@@ -9,7 +9,7 @@ namespace BattleShip
 {
     public class HumanPlayer : IPlayer
     {
-        public void MakeShot(int x, int y)
+        public void MakeShot(out int x, out int y)
         {
             throw new NotImplementedException();
         }

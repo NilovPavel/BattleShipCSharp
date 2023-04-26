@@ -14,12 +14,12 @@ namespace BattleShip
             this.cells = new Cell[this.width * this.height];
             for (int y = 0; y < this.height; y++)
                 for (int x = 0; x < this.width; x++)
-                    this.cells[y * this.width + x] = new Cell(x, y, ECellType.free);
+                    this.cells[y * this.width + x] = new Cell(x, y, ECellType.empty);
         }
 
         public void ShowShips()
         {
-            throw new NotImplementedException();
+
         }
 
         private int height;

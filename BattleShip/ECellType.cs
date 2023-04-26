@@ -10,7 +10,7 @@ namespace BattleShip
         /// <summary>
         /// Свободная клетка
         /// </summary>
-        free,
+        empty,
         /// <summary>
         /// Живая палуба корабля
         /// </summary>

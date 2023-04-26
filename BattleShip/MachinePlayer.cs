@@ -9,6 +9,15 @@ namespace BattleShip
 {
     public class MachinePlayer : IPlayer
     {
+        private int v1;
+        private int v2;
+
+        public MachinePlayer(int v1, int v2)
+        {
+            this.v1 = v1;
+            this.v2 = v2;
+        }
+
         public void CanTakeCell(int x, int y)
         {
             throw new NotImplementedException();
@@ -39,15 +48,9 @@ namespace BattleShip
             throw new NotImplementedException();
         }
 
-        public void MakeShot(int x, int y)
+        public void MakeShot(out int x, out int y)
         {
             throw new NotImplementedException();
         }
-
-        public MachinePlayer()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

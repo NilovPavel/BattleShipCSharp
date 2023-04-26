@@ -11,27 +11,27 @@ namespace BattleShip
     {
         private void Initialization()
         {
-            /*int shipSizes[10]{4,3,3,2,2,2,1,1,1,1};
-            int arraySizesCount = sizeof (shipSizes)/sizeof (int);
-            this.ships = new Ship *[arraySizesCount];
-
+            this.ships = new Ship[this.shipSizes.Length];
             for(int i = 0; i < 10; i++)
             {
-                ships[i] = new Ship(this.field, shipSizes[i]);
+                this.ships[i] = new Ship(this.field, shipSizes[i]);
                 for(int j = 0; j < i; j++)
                 {
-                    while(!ships[j].Check(*ships[i]))
+                    while(!this.ships[j].Check(this.ships[i]))
                     {
-                        ships[i].Regeneration();
+                        this.ships[i].Regeneration();
                         j = 0;
                     }
                 }
-            }*/
+            }
         }
 
         private IPlayer iPlayer;
         private Field field;
         private Ship[] ships;
+        private IPlayer firstPlayer;
+        private Field firstPlayerField;
+        private int[] shipSizes;
 
         public Ship[] Ships
         {
@@ -49,7 +49,7 @@ namespace BattleShip
                 eCellType = ships[i].Attack(x, y);
                 switch (eCellType)
                 {
-                    case ECellType.free:
+                    case ECellType.empty:
                     case ECellType.dead:
                     case ECellType.wound:
                         continue;
@@ -62,16 +62,21 @@ namespace BattleShip
 
         public ECellType Attack(Player enemyPlayer)
         {
-            return ECellType.dead;
-            /*int *shotX = new int;
-            int *shotY = new int;
-            this.iPlayer.MakeShot(*shotX, *shotY);
-            return enemyPlayer.MakeShot(*shotX, *shotY);*/
+            int shotX = 0;
+            int shotY = 0;
+            this.iPlayer.MakeShot(out shotX, out shotY);
+            return enemyPlayer.MakeShot(shotX, shotY);
         }
 
         public bool IsDead()
         {
-            throw new NotImplementedException();
+            int deadShipCount = 0;
+            
+            for (int i = 0; i < this.ships.Length; i++)
+                if (this.ships[i].getIsDead())
+                    deadShipCount += 1;
+            
+            return deadShipCount == this.ships.Length;
         }
 
         public void ShowSelf()
@@ -80,12 +85,12 @@ namespace BattleShip
                 ships[i].ShowMe();
         }
 
-        public Player(IPlayer iPlayer, Field field)
+        public Player(IPlayer iPlayer, Field field, int[] shipSizes)
         {
             this.iPlayer = iPlayer;
             this.field = field;
+            this.shipSizes = shipSizes;
             this.Initialization();
         }
-
     }
 }

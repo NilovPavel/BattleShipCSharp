@@ -15,32 +15,32 @@ namespace BattleShip
 
         public int getX()
         {
-            throw new NotImplementedException();
+            return this.x;
         }
 
         public void setX(int newX)
         {
-            throw new NotImplementedException();
+            this.x = newX;
         }
 
         public int getY()
         {
-            throw new NotImplementedException();
+           return this.y;
         }
 
         public void setY(int newY)
         {
-            throw new NotImplementedException();
+            this.y = newY;
         }
 
         public ECellType getECellType()
         {
-            throw new NotImplementedException();
+            return this.eCellType;
         }
 
         public void setECellType(ECellType newECellType)
         {
-            throw new NotImplementedException();
+            this.eCellType = newECellType;
         }
 
         public Cell(int x, int y, ECellType eCellType)
