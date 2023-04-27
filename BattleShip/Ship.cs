@@ -8,12 +8,14 @@ namespace BattleShip
         private void Initialization()
         {
             this.isDead = false;
+            this.Random();
+        }
 
-            int z = new Random().Next(0, this.field.getWidth() * this.field.getHeight());
-            this.x = z / this.field.getWidth();
-            this.y = z % this.field.getWidth();
-
-            this.direction = new Random().Next(0, 2) == 0;
+        private void Random()
+        {
+            this.direction = RandomInt.GetRandom(2) == 1;
+            this.x = !this.direction ? RandomInt.GetRandom( this.field.getWidth() - this.size) : RandomInt.GetRandom(this.field.getWidth() - 1);
+            this.y = this.direction ? RandomInt.GetRandom( this.field.getHeight() - this.size) : RandomInt.GetRandom(this.field.getHeight() - 1);
         }
 
         private void MakeBorder()
@@ -128,10 +130,7 @@ namespace BattleShip
 
         public void Regeneration()
         {
-            int z = new Random().Next(0, this.field.getWidth() * this.field.getHeight());
-            this.x = z / this.field.getWidth();
-            this.y = z % this.field.getWidth();
-
+            this.Random();
             this.MakeDecks();
             this.MakeBorder();
         }

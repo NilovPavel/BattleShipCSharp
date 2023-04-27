@@ -47,6 +47,8 @@ namespace BattleShip
             for (int i = 0; i < 10; i++)
             {
                 eCellType = ships[i].Attack(x, y);
+                if (eCellType == ECellType.wound)
+                    ;
                 switch (eCellType)
                 {
                     case ECellType.empty:

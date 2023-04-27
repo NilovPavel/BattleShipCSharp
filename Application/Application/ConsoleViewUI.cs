@@ -15,15 +15,43 @@ namespace Application
             {
                 for (int y = 0; y < field.getHeight(); y++)
                 {
-                    Console.Write((int)field.GetCellType(x, y));
+                    this.SetColorOfConsole(field.GetCellType(x, y));
+                    Console.Write((int)field.GetCellType(x, y) + " ");
                 }
                 Console.WriteLine();
             }
         }
 
+        private void SetColorOfConsole(ECellType eCellType)
+        {
+            Console.ResetColor();
+            switch (eCellType)
+            {
+                case ECellType.empty:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                case ECellType.miss:
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    break;
+                case ECellType.alive:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case ECellType.wound:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case ECellType.dead:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+            }
+        }
+
+        private void SetColorOfConsole()
+        { }
+
         public override void Update()
         {
-            Console.WriteLine("NEXT STEP");
+            Console.Clear();
+            Console.WriteLine("\r\nNEXT STEP\r\n");
             this.ShowField(this.firstField);
             this.ShowField(this.secondField);
         }

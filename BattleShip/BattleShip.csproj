@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IPlayer.cs" />
     <Compile Include="IUserManipulator.cs" />
+    <Compile Include="RandomInt.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="ECellType.cs" />
     <Compile Include="MachinePlayer.cs" />

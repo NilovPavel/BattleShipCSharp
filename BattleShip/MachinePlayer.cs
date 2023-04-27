@@ -85,7 +85,7 @@ namespace BattleShip
             int y = 0;
             do
             {
-                int z = new Random().Next(0, this.enemyField.getWidth() * this.enemyField.getHeight());
+                int z = RandomInt.GetRandom(this.enemyField.getWidth() * this.enemyField.getHeight());
                 x = z / this.enemyField.getWidth();
                 y = z % this.enemyField.getWidth();
             }

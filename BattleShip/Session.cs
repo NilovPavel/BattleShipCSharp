@@ -54,6 +54,7 @@ namespace BattleShip
             {
                 this.userInterFace.Update();
                 ECellType eCellType = currentAttacker.Attack(currentSacrifice);
+
                 switch (eCellType)
                 {
                     case ECellType.empty:
